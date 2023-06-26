@@ -1,0 +1,8 @@
+<script>
+    function myfunction(s){
+        return s instanceof Error|| toString.call(s)=='[object Error]'
+    }
+    console.log(myfunction(new Error('foo')));
+console.log(myfunction(100));
+console.log(myfunction('foo'));
+</script>

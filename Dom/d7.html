@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>
+            change the content
+        </title>
+    </head>
+    <style type="text/css">
+        body{margin-top: 40px;}
+    </style>
+    <script>
+        function CreateTB(){
+            rn=window.prompt("Input number of rows",1)
+            cn=window.prompt("input of the column",1)
+            for (var r=0;r<parseInt(rn,10);r++){
+                var x=document.getElementById('Mytable').insertRow(r)
+                for(var c=0;c<parseInt(cn,10);c++){
+                    var y=x.insertCell(c)
+                    y.innerHTML="Row-"+r+" Column-"+c
+                }
+            }
+        }
+    </script>
+    <body>
+        <table id="Mytable" border="3">
+
+        </table><form>
+            <input type="button" onclick="CreateTB()" value="create table">
+        </form>
+    </body>
+</html>

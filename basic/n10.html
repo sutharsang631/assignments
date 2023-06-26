@@ -1,0 +1,37 @@
+<html>
+    <head>
+
+    </head>
+    <script>
+        // function mul(){
+        //     num1=document.getElementById("fnum").value
+        //     num2=document.getElementById("lnum").value
+        //     document.getElementById("result").innerHTML=num1*num2
+        // }
+        // function div(){
+        //     num1=document.getElementById("fnum").value
+        //     num2=document.getElementById("lnum").value
+        //     document.getElementById("result").innerHTML=num1/num2
+        // }
+        function mul(){
+            num1=document.getElementById("fnum").value
+            num2=document.getElementById("lnum").value
+            document.getElementById("result").innerHTML=num1*num2
+        }
+        function div(){
+            num1=document.getElementById("fnum").value
+            num2=document.getElementById("lnum").value
+            document.getElementById("result").innerHTML=num1/num2
+        }
+    </script>
+    <style>
+        body{margin: 30px;}
+    </style>
+    <form>
+    1st number: <input type="text" id="fnum"><br>
+    2st number: <input type="text" id="lnum"><br>
+    <input type="button" onclick="mul()" value="Multiply"/>
+    <input type="button" onclick="div()" value="Division">
+    </form>
+    <p>The Result is  <span id="result"></span></p>
+</html>

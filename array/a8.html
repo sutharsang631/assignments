@@ -1,0 +1,18 @@
+<script>
+    a=[3, 'a', 'a', 'a', 2, 3, 'a', 3, 'a', 2, 4, 9, 3]
+    mf=1
+    m=0
+    for(i=0;i<a.length;i++){
+        for(j=i;j<a.length;j++){
+            if(a[i]==a[j]){
+                m++
+        }
+        if(mf<m){
+            mf=m
+            it=a[i]
+        }
+    }
+    m=0
+}
+console.log(it," ",mf,"times")
+</script>

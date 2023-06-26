@@ -1,0 +1,22 @@
+<script>
+    function myfunc(num,t){
+        ind=[]
+        for(i=0;i<num.length;i++){
+            for(j=i+1;j<num.length;j++){
+                if(num[i]+num[j]===t){
+                    ind.push(i)
+                    ind.push(j)
+                    break
+                }
+            }
+            if(ind.length>0){
+                break
+            }
+        }
+        return ind.join(', ')
+
+    }
+    num=[10,20,30,40,50,60,70]
+    t=50
+    console.log(myfunc(num,t))
+</script>

@@ -1,0 +1,13 @@
+<script>
+    function myfunc(x,y){
+        if (!((x % 7 == 0 || x % 11 == 0) && (y % 7 == 0 || y % 11 == 0))){
+            return((x % 7 == 0 || y % 11 == 0) || (x % 7 == 0 || y % 11 == 0));
+    }
+    else{
+        return false
+    }
+}
+console.log(myfunc(14, 21));
+console.log(myfunc(14, 20));
+console.log(myfunc(16, 20));
+</script>

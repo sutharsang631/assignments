@@ -1,0 +1,10 @@
+<script>
+ function myfunc(input) {
+  if (Object.prototype.toString.call(input) === '[object String]')
+    return true;
+  else
+    return false;   
+    };
+console.log(myfunc('w3resource'));
+console.log(myfunc([1, 2, 4, 0]));
+</script>

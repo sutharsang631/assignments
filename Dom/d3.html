@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>
+            background  color changing
+        </title>
+    </head>
+    <script>
+        function buttonfun(){
+            doc=document.getElementsByTagName('body')[0]
+            mybody=doc.getElementsByTagName('p')
+            mp1=mybody[0]
+            mp1.style.background='green'
+            mp2=mybody[1]
+            mp2.style.background='red'
+
+        }
+    </script>
+    <body>
+        <input type="button" value="color background" onclick="buttonfun()">
+        <p>view welll</p>
+        <br>
+        <p>done welll</p>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+<script>
+    function myfunc(m,i,p){
+        if(typeof(p)=='undefined'){
+            p=0
+        }
+        if(typeof(i)==undefined){
+            i=''
+        }
+        return m.slice(0,p)+i+m.slice(p)
+    }
+    console.log(myfunc('We are doing some exercises.','JavaScript ',18))
+</script>

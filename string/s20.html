@@ -1,0 +1,15 @@
+<script>
+    function myfunc(p,us,pos){
+        if(typeof us ==='undefined'){
+            return p
+        }
+        if(p=='l'){
+            return(p+us).slice(-p.length)
+        }
+        else{
+            return(us+p).substring(0,p.length)
+        }
+    }
+    console.log(myfunc('0000',123,'l'));
+console.log(myfunc('00000000',123,''));
+</script>

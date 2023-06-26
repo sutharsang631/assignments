@@ -1,0 +1,23 @@
+<script>
+    function myfunc(str){
+        if (str===null||str===''){
+            return false
+        }
+        else{
+            str=str.toString()
+        }
+        map={
+    '&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#039;'
+  };
+  return str.replace(/[&<>"']/g,function(m){ 
+    return map[m]
+  })
+    }
+    console.log(myfunc('php & MySQL'))
+    console.log(myfunc('3 > 2'))
+
+</script>

@@ -1,0 +1,18 @@
+<script>
+    function myfunc(a,sv,l=0,h=a.length-1){
+        if(h<l||a.lenght==0){
+            return -1
+        }
+        m=l+Math.floor((h-l)/2)
+        if(a[m]===sv){
+            return m
+        }
+        if(a[m]>sv){
+            return (a,sv,l,m-1)
+        }
+        return myfunc(a,sv,m+1,h)
+    }
+    ma=[1,2,3,4,5,6,7,8,9,10,22,12,14,18]
+    console.log(myfunc(ma,6))
+    console.log(myfunc(ma,15))
+</script>

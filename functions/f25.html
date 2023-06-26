@@ -1,0 +1,10 @@
+<script>
+    function myfunc(s)
+    {
+        return s.reduce(function(l,c)
+        {
+            return l.length>c.length?l:c
+        }," ");
+    }
+    console.log(myfunc(["India","Germany","United Kingdom"]))
+</script>

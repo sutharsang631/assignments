@@ -1,0 +1,23 @@
+<script>
+function myfunc(s){
+    a=s.split('')
+    r=''
+    ctr=0
+    for(x=0;x<a.length;x++){
+        ctr=0
+        for(y=0;y<a.length;y++){
+            if(a[x]==a[y]){
+                ctr+=1
+            }
+    
+        }
+        if(ctr<2){
+            result=a[x]
+            break
+        }
+    }
+    return result
+
+}
+console.log(myfunc('abacddbec'))
+</script>

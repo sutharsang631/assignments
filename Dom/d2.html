@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>
+            first and last name
+        </title>
+    </head>
+    <script>
+        function getForm(){
+           var x=document.getElementById('form1')
+           for(i=0;i<x.length;i++){
+            if(x.elements[i].value!='Submit'){
+                console.log(x.elements[i].value)
+            }
+           } 
+        }
+    </script>
+    <style>
+        body{
+            margin-top: 40px;
+        }
+    </style>
+    <body>
+        <form id="form1" onsubmit="getForm()">
+            First Name : <input type="text" name="fname" value="david"><br>
+            Last Name : <input type="text" name="lname" value="jonse"><br>
+            <input type="submit" value="Submit">
+
+        </form>
+    </body>

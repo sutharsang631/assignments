@@ -1,0 +1,10 @@
+<script>
+    function myfunc(a, b) {
+    if ( ! b) {
+        return a;
+    }
+
+    return myfunc(b, a % b);
+};
+console.log(myfunc(233, 47));
+</script>

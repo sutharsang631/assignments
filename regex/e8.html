@@ -1,0 +1,19 @@
+<script>
+    function is_url(str)
+{
+  regexp =  /https/;
+        if (regexp.test(str))
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+}
+
+console.log(is_url("http://www.example.com"));
+console.log(is_url("https://www.example.com"));
+console.log(is_url("www.example.com"));
+
+</script>

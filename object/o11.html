@@ -1,0 +1,17 @@
+<script>
+function allProperties(obj) {
+  var methods = [];
+
+  for (var prop in obj) {
+    if (typeof obj[prop] === 'function') {
+      methods.push(prop);
+    }
+  }
+
+  return methods;
+}
+array=
+["length", "name", "arguments", "caller", "prototype", "isArray", "observe", "unobserve"]
+console.log(allProperties(array));
+
+</script>

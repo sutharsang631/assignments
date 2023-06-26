@@ -1,0 +1,21 @@
+<script>
+    function myfunc(a1,a2){
+        temp=[]
+        a11=a1.toString().split(',').map(Number)
+        a21=a2.toString().split(',').map(Number)
+        for(var i in a1){
+            if(!a21.includes(a11[i])){
+                temp.push(a11[i])
+            } 
+        for(i in a21){
+                if(!a11.includes(a21[i])){
+                    temp.push(a21[i])
+                }
+            }
+            
+        }
+        return temp.sort((a,b)=>a-b)
+    }
+    console.log(myfunc([1, 2, 3], [100, 2, 1, 10]));
+console.log(myfunc([1, 2, 3, 4, 5], [1, [2], [3, [[4]]],[5,6]]));
+</script>

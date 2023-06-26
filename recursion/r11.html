@@ -1,0 +1,12 @@
+<script>
+    function myfunc(n){
+        if(n==0||n==1){
+            return String(n)
+        }
+        return myfunc(Math.floor(n/2)) + String(n%2)
+    }
+    console.log(myfunc(1))
+console.log(myfunc(0))
+console.log(myfunc(10))
+console.log(myfunc(101))
+</script>

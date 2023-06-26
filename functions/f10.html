@@ -1,0 +1,19 @@
+<script>
+    function myfunc(n) {
+   m = [];
+  for ( i = 0; i < n; i++) {
+    let row = [];
+    for ( j = 0; j < n; j++) {
+      if (i === j){
+        row.push(1);
+      } else {
+        row.push(0);
+      }
+    }
+    m.push(row);
+  }
+  return m;
+}
+console.log(myfunc(4));
+
+</script>

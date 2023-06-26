@@ -1,0 +1,12 @@
+<script>
+num=window.prompt()
+s=num.toString()
+result=[s[0]]
+for(var x=1;x<s.length;x++){
+    if(s[x-1]%2===0 && s[x]%2===0){
+        result.push('-',s[x]);
+    }else{
+        result.push(s[x])
+    }
+}console.log(result.join(''))
+</script>

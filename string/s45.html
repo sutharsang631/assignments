@@ -1,0 +1,16 @@
+<script>
+    function successor(str) {
+  var lastChar = str.charAt(str.length - 1);
+
+  if (lastChar === 'z' || lastChar === 'Z') {
+    return str.slice(0, -1) + String.fromCharCode(lastChar.charCodeAt(0) + 1);
+  } else {
+    return str.slice(0, -1) + String.fromCharCode(lastChar.charCodeAt(0) + 1);
+  }
+}
+
+// Test cases
+console.log(successor('abcd'));
+console.log(successor('3456'));
+
+</script>

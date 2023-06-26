@@ -1,0 +1,18 @@
+<script>
+    function myfunc(str,suf){
+        if(((str===null)||(str==''))||((suf===null)||(suffix==='')))
+        {
+            return false
+
+        }
+        else
+        {
+            str=str.toString();
+            suf=suf.toString()
+        }
+        return str.indexOf(suf,str.length-suf.length)!==-1;
+    }
+    console.log(myfunc('JS PHP PYTHON','PYTHON'));
+
+console.log(myfunc('JS PHP PYTHON',''));
+</script>

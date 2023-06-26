@@ -1,0 +1,14 @@
+<script>
+    function myfunc(s){
+        n=s.split(" ")
+        a=n[0]
+        console.log(a)
+        for(var i=1;i<n.length;i++){
+            if (a.length<n[i].length){
+                a=n[i]
+            }
+        }
+        return a
+    }
+    console.log(myfunc("Web Developer world"))
+</script>

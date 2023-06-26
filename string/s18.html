@@ -1,0 +1,13 @@
+<script>
+    function myfunc(m,ss){
+        m+=''
+        ss+=''
+        if (ss.length<=0){
+            return m.length+1
+        }
+        subst=ss.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')
+        return(m.match(new RegExp(ss,'gi'))||[]).length
+    }
+    console.log(myfunc("The quick brown fox jumps over the lazy dog", 'the'));
+console.log(myfunc("The quick brown fox jumps over the lazy dog", 'fox',false));
+</script>

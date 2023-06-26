@@ -1,0 +1,13 @@
+<script>
+    function myfunc(s){
+        n=s.split(" ")
+        console.log(n)
+        var a=[]
+        for (var i=0;i<n.length;i++){
+            a.push(n[i].charAt(0).toUpperCase()+n[i].slice(1))
+        }
+        return(a.join(" "))
+
+    }
+    console.log(myfunc("welcome to world and say hello"))
+</script>

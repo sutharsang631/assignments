@@ -1,0 +1,9 @@
+<script>
+    function myfunc(s){
+        u=[]
+        s.replace(/\S/g, function(l){u[l] = (isNaN(u[l]) ? 1 : u[l] + 1);});
+        return u
+    }
+
+    console.log(myfunc("The quick brown fox jumps over the lazy dog"))
+</script>

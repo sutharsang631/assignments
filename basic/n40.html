@@ -1,0 +1,18 @@
+<script>
+    function myfunc(s1,s2){
+        if (s1==8 || s2==8){
+            return true
+        }
+        else if((s1+s2==8)||(Math.abs(s1-s2)==8)){
+            return true
+            
+        }
+        else{
+            return false
+        }
+    }
+    console.log(myfunc(30,20))
+    console.log(myfunc(24,32))   
+    console.log(myfunc(8,32))
+
+</script>

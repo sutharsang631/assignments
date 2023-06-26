@@ -1,0 +1,10 @@
+<script>
+    function union(a1,a2){
+        ca=a1.concat(a2)
+        uv=[...new Set(ca)]
+
+        console.log(ca)
+        return uv
+    }
+    console.log(union([1,2,3],[100,2,1,10]))
+</script>
