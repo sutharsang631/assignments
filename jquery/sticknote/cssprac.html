@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sticky Notes</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <style>
+    body{
+      background-color: #dfdfdf;
+      /* text-shadow: 2px 2px 6px rgb(119, 116, 113); */
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      margin: 0px;
+      padding: 2px;
+    }
+    h1,h2{
+      text-align: center;
+      color: #333;
+      text-shadow: 6px 6px 3px #0000004d;
+
+    }
+    #loginPage, #signupPage, #stickNotePage {
+      max-width: 500px;
+      margin:0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 2px 5px #0000004d ;
+    }
+    #loginForm, #signupForm {
+    margin-bottom: 20px;
+     }
+
+     input[type="text"],input[type="password"]{
+      width: 60%;
+      padding: 7px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: border-color 0.3s ease;
+     }
+     input[type="text"]:focus,input[type="password"]:focus{
+      border-color: #4caf50;
+      outline:green;
+     }
+     button{
+      background-color: #4caf50;
+      border-radius: 3px;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s easy;
+      padding: 8px 16px;
+      color: #fff;
+      
+
+     }
+     button:hover{
+      /* transform: translateY(-5px); */
+      /* letter-spacing: 1px; */
+      letter-spacing: 2px ;
+     }
+     button:disabled{
+      background-color: #ccc;
+      cursor: not-allowed;
+      
+     }
+
+     #toggleButton{
+      display: inline;
+      margin-bottom: 20px;
+      text-align: center;
+      padding: 5px;
+      background-color: #4caf50;
+      text-decoration: none;
+      color: #fff;
+     }
+
+     #toggleButton:hover{
+      color: #503f3f;
+      
+     }
+
+    /* #loggedInUserSection{
+      background-color: rgb(255, 240, 221);
+      margin-bottom: 2px;
+    } */
+    .password-strength {
+      color: red;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+    .sticky-note {
+      width: 200px;
+      height: 200px;
+      background-color: yellow;
+      position: absolute;
+      cursor: move;
+      float:left;
+      position: relative;
+      padding: 10px;
+      border: 1px solid black;
+    }
+    .sticky-note .remove {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sticky notes</h1>
+  
+  <div id="loggedInUserSection" class="hidden">
+    <h2>Welcome <span id="loggedInUsername"></span></h2>
+    <button id="logoutButton">Logout</button>
+    <hr>
+  </div>
+
+  <div id="loginPage">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="loginUsername">Username:</label>
+      <input type="text" id="loginUsername" required>
+      <br>
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" required>
+      <br>
+      <button type="submit">Login</button>
+    </form>
+    <a href="#" id="toggleButton">New User? Sign Up</a>
+  </div>
+  
+  <div id="signupPage" class="hidden">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <label for="signupUsername">Username:</label>
+      <input type="text" id="signupUsername" required>
+      <br>
+      <label for="signupPassword">Password:</label>
+      <input type="password" id="signupPassword" required>
+      <br>
+      <div class="password-strength"></div>
+      <br>
+      <button type="submit" id="signupButton" disabled>Sign Up</button>
+    </form>
+    <a href=""  id="toggleButton">Existing User? Login</a>
+  </div>
+  
+  <div id="stickyNotePage" class="hidden">
+    <h2>Draggable Sticky Notes</h2>
+    <input type="text" id="taskInput" placeholder="Enter task">
+    <button id="addNoteBtn">Add Sticky Note</button>
+    <div id="notesContainer"></div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      var loggedInUser = getStoredCredentials();
+      
+      if (loggedInUser) {
+        showLoggedInUserSection(loggedInUser.username);
+        showStickyNotePage();
+      } else {
+        showLoginPage();
+      }
+
+      $('#toggleButton').click(function() {
+        $('#loginPage').toggleClass('hidden');
+        $('#signupPage').toggleClass('hidden');
+      });
+
+      $('#loginForm').submit(function(e) {
+        e.preventDefault();
+        var username = $('#loginUsername').val();
+        var password = $('#loginPassword').val();
+        var storedCredentials = getStoredCredentials();
+
+        if (storedCredentials && storedCredentials.username === username && storedCredentials.password === password) {
+          $('#loginForm')[0].reset();
+          showLoggedInUserSection(username);
+          showStickyNotePage();
+        } else {
+          alert('Invalid username or password. Please try again.');
+        }
+      });
+
+      $('#signupForm').submit(function(e) {
+        e.preventDefault();
+        var username = $('#signupUsername').val();
+        var password = $('#signupPassword').val();
+        var strength = checkPasswordStrength(password);
+
+        if (strength === 'Strong') {
+          $('#signupForm')[0].reset();
+          showLoggedInUserSection(username);
+          showStickyNotePage();
+        } else {
+          alert('Please enter a strong password.');
+        }
+      });
+
+      $('#signupPassword').keyup(function() {
+        var password = $(this).val();
+        var strength = checkPasswordStrength(password);
+        if(strength=='Weak'){
+            $('.password-strength').text('Password Strength: ' + strength+' Password');
+        }
+        else{
+            $('.password-strength').text('Password Strength: ' + strength+ " Password").css('color','green');
+        }        $('#signupButton').prop('disabled', !(strength === 'Strong'));
+      });
+
+      function checkPasswordStrength(password) {
+        var regex = /^(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (regex.test(password)) {
+          return 'Strong';
+        } else {
+          return 'Weak';
+        }
+      }
+
+      function getStoredCredentials() {
+        var storedCredentials = localStorage.getItem('credentials');
+        if (storedCredentials) {
+          return JSON.parse(storedCredentials);
+        }
+        return null;
+      }
+
+      function showLoggedInUserSection(username) {
+        $('#loggedInUsername').text(username);
+        $('#loggedInUserSection').removeClass('hidden');
+      }
+
+      function showLoginPage() {
+        $('#loginPage').removeClass('hidden');
+      }
+
+      function showStickyNotePage() {
+        $('#loginPage').addClass('hidden');
+        $('#signupPage').addClass('hidden');
+        $('#stickyNotePage').removeClass('hidden');
+      }
+
+      $('#addNoteBtn').click(function() {
+        var task = $('#taskInput').val();
+        createStickyNoteElement(task);
+      });
+
+      function createStickyNoteElement(task) {
+        var note = $('<div>', {
+          class: 'sticky-note',
+          text: task
+        }).draggable();
+
+        var removeButton = $('<span>', {
+          class: 'remove',
+          text: 'x'
+        }).click(function() {
+          $(this).parent().remove();
+        });
+
+        note.append(removeButton);
+        $('#notesContainer').append(note);
+      }
+
+      $('#logoutButton').click(function() {
+        $('#loggedInUserSection').addClass('hidden');
+        $('#stickyNotePage').addClass('hidden');
+        showLoginPage();
+      });
+    });
+  </script>
+</body>
+</html>

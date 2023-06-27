@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Character Limit in Textarea</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <style>
+    #charCount {
+      color: red;
+    }
+  </style>
+  <script>
+    $(document).ready(function(){
+        var maxLength = 15;
+$('textarea').keyup(function() {
+  var textlen = maxLength - $(this).val().length;
+  $('#rchars').text(textlen);
+});
+
+
+    })
+  </script>
+</head>
+<body>
+    <form>
+        <label>Maximum 15 characters</label>
+        <textarea id="textarea" maxlength="15"></textarea>
+          <span id="rchars">15</span> Character(s) Remaining
+        </form>
+    </body>
+</html>

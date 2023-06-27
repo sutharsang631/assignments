@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ajax</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      // Get all items
+      $('#getAllBtn').click(function() {
+        $.ajax({
+          url: 'https://jsonplaceholder.typicode.com/posts',
+          method: 'GET',
+          success: function(response) {
+            displayData(response);
+          },
+          error: function(xhr, status, error) {
+            console.log('Error:', error);
+          }
+        });
+      });
+      $('#getByIdBtn').click(function() {
+        var id = $('#itemId').val();
+        $.ajax({
+          url:'https://jsonplaceholder.typicode.com/posts/' +id,
+          method:'GET',
+          success: function(response){
+            displayData(response)
+          },
+          error:function(xhr,status,error){
+            console.log('Error: ',error)
+          }
+
+        })
+      })
+      $('#createBtn').click(function(){
+        var newItem={
+          title:$('#title').val(),
+          body:$('#body').val(),
+          userId:1
+        }
+      
+      $.ajax({
+        url: 'https://jsonplaceholder.typicode.com/posts',
+        method:'POST',
+        data: JSON.stringify(newItem),
+        headers:{
+          'Content-type':'application/json; charset= UTF-8'
+        },
+        success: function(response){
+          displayData(response)
+        },
+        error: function(xhr,status,error){
+          console.log('Error: ',error)
+        }
+      })
+
+      })
+
+      $('#updateBtn').click(function(){
+        var id=$('#itemId').val()
+        var updatedItem={
+          title: $('#title').val(),
+          body: $('#body').val(),
+          userId: 1
+        }
+        $.ajax({
+          url: 'https://jsonplaceholder.typicode.com/posts/' + id,
+          method: 'PUT',
+          data: JSON.stringify(updatedItem),
+          headers:{
+            'Content-type':'application/'
+          },
+          success: function(response){
+            displayData(response);
+          },
+          error:function(xhr,status,error){
+            console.log('Error: ',error)
+          }
+        })
+      })
+      $('#deleteBtn').click(function() {
+        var id = $('#itemId').val();
+        $.ajax({
+          url: 'https://jsonplaceholder.typicode.com/posts/' + id,
+          method: 'DELETE',
+          success: function(response) {
+            $('#output').text('Item deleted successfully.');
+          },
+          error: function(xhr, status, error) {
+            console.log('Error:', error);
+          }
+        });
+      });
+      
+
+      function displayData(data) {
+        var $output = $('#output');
+        $output.empty();
+        
+    //     if (data && data.length > 0) {
+    //       data.forEach(function(item) {
+    //         var itemHtml = '<div class="item">' +
+    //           '<h2>' + item.title + '</h2>' +
+    //           '<p>' + item.body + '</p>' +
+    //           '</div>';
+    //         $output.append(itemHtml);
+    //       });
+    //     } else {
+    //       $output.text('No data found.');
+    //     }
+    //   }
+    // // });
+    // function displayData1(data) {
+    //   var $output = $('#output');
+    //     $output.empty();
+        
+        if (data) {
+          var item = '<div class="item">' +
+            '<h2>' + data.title + '</h2>' +
+            '<p>' + data.body + '</p>' +
+            '</div>';
+          
+          $output.append(item);
+        } else {
+          $output.text('No data found.');
+        }
+      }
+    });
+
+  </script>
+</head>
+<body>
+  <h1>Ajax Sample</h1>
+  <button id="getAllBtn">Get All Items</button>
+  <br>
+
+  <h2>Get item by id</h2>
+  <input type="number" id="itemId">
+  <button id="getByIdBtn">Get Item</button>
+  <br>
+
+  <h2>Create/Update Item: </h2>
+  <label for="title">Title: </label>
+  <input type="text" id="title">
+  <br>
+
+  <label for="body">Body: </label>
+  <input type="text" id="body">
+  <br>
+
+  <button id="createBtn">Create</button>
+  <button id="updateBtn">Update</button>
+
+  <h2>Delete Item:</h2>
+  <input type="number" id="itemId">
+  <button id="deleteBtn">Delete Item</button>
+  <div id="output"></div>
+</body>
+</html>

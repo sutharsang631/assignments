@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple AJAX Example</title>
+  <style>
+    .zebra{
+        background: #000;
+        color: #fff;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script>
+$(document).ready(function(){
+	$("tr:odd").addClass("zebra");
+});
+  </script>
+</head>
+<body>
+    <div class="table_style">
+        <table>
+            <tr>
+                <th>Student Name</th>
+                <th>Marks in Science</th>
+            </tr>
+            <tr>
+                <td>Janet</td>
+                <td>85.00</td>
+            </tr>
+            <tr>
+                <td>David</td>
+                <td>92.00</td>
+            </tr>
+            <tr>
+                <td>Arthur</td>
+                <td>79.00</td>
+            </tr>
+            <tr>
+                <td>Bill</td>
+                <td>82.00</td>
+            </tr>
+        </table>
+        </div>
+</body>
+</html>

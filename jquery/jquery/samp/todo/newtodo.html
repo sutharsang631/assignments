@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To-Do List App</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <h1>To-Do List App</h1>
+  
+  <div id="login">
+    <h2>Login</h2>
+    <input type="text" id="loginUsername" placeholder="Username"><br>
+    <input type="password" id="loginPassword" placeholder="Password"><br>
+    <button id="loginButton">Login</button><br>
+    <p>Don't have an account? <a href="#" id="signupLink">Sign Up</a></p>
+  </div>
+  
+  <div id="signup" style="display: none;">
+    <h2>Sign Up</h2>
+    <input type="text" id="signupUsername" placeholder="Username"><br>
+    <input type="password" id="signupPassword" placeholder="Password"><br>
+    <button id="signupButton">Sign Up</button><br>
+    <p>Already have an account? <a href="#" id="loginLink">Login</a></p>
+  </div>
+  
+  <div id="todo" style="display: none;">
+    <h2>Welcome, <span id="currentUser"></span>!</h2>
+    <input type="text" id="taskInput" placeholder="Add new task">
+    <button id="addTaskButton">Add Task</button>
+    <ul id="taskList"></ul>
+    <button id="logoutButton">Logout</button>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

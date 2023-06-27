@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>jQuery .on() Example</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <style>
+    .highlight {
+      background-color: yellow;
+    }
+  </style>
+  <script>
+    $(document).ready(function() {
+      $("p").on("click", function() {
+        // $(this).addClass("highlight");
+        console.log('click')
+      });
+    });
+  </script>
+</head>
+<body>
+  <p>Click me!</p>
+</body>
+</html>

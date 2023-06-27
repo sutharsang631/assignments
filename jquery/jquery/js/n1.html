@@ -1,0 +1,42 @@
+<script>
+// a1=[3, 'a', 'a', 'a', 2, 3, 'a', 3, 'a', 2, 4, 9, 3]
+function findMostFrequentItem(arr) {
+  const countMap = {};
+  
+  for(i=0;i<arr.length;i++){
+    item=arr[i]
+    if(countMap[item]){
+        countMap[item]++;
+    }
+    else{
+        countMap[item]=1
+    }
+  }
+  console.log(countMap)
+  let max=1
+  let most
+  for( const i in countMap){
+    if(countMap[i]>max){
+        most=i
+        max=countMap[i]        
+    }
+  }
+  return `${most} (${max} times)`;
+}
+// let mostFrequentItem;
+//   let maxCount = 0;
+  
+//   for (const item in countMap) {
+//     if (countMap[item] > maxCount) {
+//       mostFrequentItem = item;
+//       maxCount = countMap[item];
+//     }
+//   }
+  
+//   return `${mostFrequentItem} (${maxCount} times)`;
+// }
+const arr1 = [3, 'a', 'a', 'a', 2, 3, 'a', 3, 'a', 2, 4, 9, 3];
+const result = findMostFrequentItem(arr1);
+console.log(result); // Output: "a (5 times)"
+
+</script>

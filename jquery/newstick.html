@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>sticky-note</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <style>
+    .password-strength {
+      color: red;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+    .sticky-note {
+      width: 200px;
+      height: 200px;
+      background-color: rgb(230, 230, 39);
+      float: left;
+      border: 1px solid black;
+      position: absolute;
+      cursor: move;
+      padding: 10px;
+    }
+    #loginPage{
+      
+      text-align: center;
+      align-items: center;
+      padding: 1rem;
+      width: 300px;
+      height: 300px;
+      position:absolute;
+      margin: 0 0 0 450px;
+      border-radius: 1px;
+    }
+    #signupPage{
+      
+      text-align: center;
+      align-items: center;
+      padding: 1rem;
+      width: 300px;
+      height: 300px;
+      position:absolute;
+      margin: 0 0 0 450px;
+      border-radius: 1px;
+    }
+    #signupUsername{
+      margin-bottom: 1rem;
+    }
+
+    #loginUsername{
+      margin-bottom: 1rem;
+    }
+    button{
+      margin-bottom: 1rem;
+      color: black;
+      background: white;
+      border: 1px solid black;
+    }
+    button:hover{
+      background-color: aqua;
+    }
+    button:active{
+      background-color: blue;
+    }
+    #stickyNotePage{
+      text-align: center;
+      align-items: center;
+      padding: 1rem;
+     
+    }
+  </style>
+</head>
+<body>
+  <h1><center>sticky-note</center></h1>
+  
+  <div id="loginPage">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="loginUsername">Username:</label>
+      <input type="text" id="loginUsername" required>
+      <br>
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" required>
+      <br>
+      <h3 id="warn"></h3>
+      <button type="submit">Login</button>
+    </form>
+    <a href="#" id="toggleButton">New User? Sign Up</a>
+  </div>
+  
+  <div id="signupPage" class="hidden">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <label for="signupUsername">Username:</label>
+      <input type="text" id="signupUsername" required>
+      <br>
+      <label for="signupPassword">Password:</label>
+      <input type="password" id="signupPassword" required>
+      <br>
+      <div class="password-strength"></div>
+      <br>
+      <button type="submit" id="signupButton" disabled>Sign Up</button>
+    </form>
+    <a href="" id="toggleButton">Existing User? Login</a>
+  </div>
+  
+  <div id="stickyNotePage" class="hidden">
+    <h2>Draggable Sticky Notes</h2>
+    <input type="text" id="taskInput" placeholder="Enter task">
+    <button id="addNoteBtn">Add Sticky Note</button>
+    <div id="notesContainer"></div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('#toggleButton').click(function() {
+        $('#loginPage').toggleClass('hidden');
+        $('#signupPage').toggleClass('hidden');
+      });
+
+      $('#loginForm').submit(function(e) {
+        e.preventDefault();
+        var username = $('#loginUsername').val();
+        var password = $('#loginPassword').val();
+        var storedCredentials = getStoredCredentials();
+        
+        if (storedCredentials && storedCredentials.username === username && storedCredentials.password === password) {
+          $('#loginForm')[0].reset();
+          $("#warn").hide();
+          // $(this).dealy(2000)
+
+          showStickyNotePage();
+        } else {
+          $("#warn").text('Invalid Username and Password').css();
+        }
+      });
+
+      $('#signupForm').submit(function(e) {
+        e.preventDefault();
+        var username = $('#signupUsername').val();
+        var password = $('#signupPassword').val();
+        var strength = checkPasswordStrength(password);
+
+        if (strength === 'Strong') {
+          storeCredentials(username, password);
+          console.log($('#signupForm')[0])
+          $('#signupForm')[0].reset();
+          showStickyNotePage();
+        } else {
+          $("#warn").text('Please enter a strong password.');
+        }
+      });
+
+      $('#signupPassword').keyup(function() {
+        var password = $(this).val();
+        var strength = checkPasswordStrength(password);
+        if(strength=='Weak'){
+            $('.password-strength').text('Password Strength: ' + strength+' Password').css('color','red');
+        }
+        else{
+            $('.password-strength').text('Password Strength: ' + strength+ " Password").css('color','green');
+        }
+        $('#signupButton').prop('disabled', !(strength === 'Strong'));
+      });
+
+      function checkPasswordStrength(password) {
+        if (((/[A-Z]/.test(password)) && (/[!@#$%^&*]/.test(password)) && (/[0-9]/.test(password) )&& (password.length >= 8))) {
+          return 'Strong';
+        } else {
+          return 'Weak';
+        }
+      }
+
+      function storeCredentials(username, password) {
+        var credentials = {
+          username: username,
+          password: password
+        };
+        localStorage.setItem('credentials', JSON.stringify(credentials));
+      }
+
+      function getStoredCredentials() {
+        var storedCredentials = localStorage.getItem('credentials');
+        if (storedCredentials) {
+          return JSON.parse(storedCredentials);
+        }
+        return null;
+      }
+
+
+    //   $('#signupPassword').keyup(function() {
+    //     checkPasswordStrength();
+    // });
+      function showStickyNotePage() {
+        $('#loginPage').addClass('hidden');
+        $('#signupPage').addClass('hidden');
+        $('#stickyNotePage').removeClass('hidden');
+      }
+
+      $('#addNoteBtn').click(function() {
+        var task = $('#taskInput').val();
+        createStickyNote(task);
+        $('#taskInput').val('')
+      });
+
+      function createStickyNote(task) {
+        var note = $('<div>', {
+          class: 'sticky-note',
+          text: task
+        }).draggable();
+
+        $('#notesContainer').append(note);
+      }
+    });
+  </script>
+</body>
+</html>

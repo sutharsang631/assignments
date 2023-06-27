@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #gameArea {
+      width: 500px;
+      height: 500px;
+      position: relative;
+      border: 1px solid black;
+    }
+
+    #player {
+      width: 50px;
+      height: 50px;
+      background-color: blue;
+      position: absolute;
+    }
+
+    #ball {
+      width: 25px;
+      height: 25px;
+      background-color: red;
+      position: absolute;
+    }
+
+    #score {
+      margin-top: 10px;
+    }
+</style>
+<body>
+    <h1>catch the cube</h1>
+    <div id="gamearea">
+        <div id="player"></div>
+        <div id="ball"></div>
+    </div>
+    <div id="score">Score: <span id="scoreValue">0</span></div>
+    <div id="time">time Left: <span id="timeValue">60</span></div>
+    <div id="gameOver">Game Over</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+  var playerSpeed = 10; 
+  var ballSpeed = 5; 
+  var gameAreaWidth = 500;
+  var gameAreaHeight = 500; 
+  var playerPosition = { x: gameAreaWidth / 2, y: gameAreaHeight / 2 }; // Initial player position
+  var ballPosition = { x: Math.random() * (gameAreaWidth - 25), y: Math.random() * (gameAreaHeight - 25) }; // Initial ball position
+  var score = 0;
+
+  function updatePlayer() {
+    $('#player').css({ left: playerPosition.x, top: playerPosition.y });
+  }
+
+  function updateBall() {
+    $('#ball').css({ left: ballPosition.x, top: ballPosition.y });
+  }
+
+  function checkCollision() {
+    var playerLeft = playerPosition.x;
+    var playerRight = playerPosition.x + 50;
+    var playerTop = playerPosition.y;
+    var playerBottom = playerPosition.y + 50;
+
+    var ballLeft = ballPosition.x;
+    var ballRight = ballPosition.x + 25;
+    var ballTop = ballPosition.y;
+    var ballBottom = ballPosition.y + 25;
+
+    if (
+      playerRight >= ballLeft &&
+      playerLeft <= ballRight &&
+      playerBottom >= ballTop &&
+      playerTop <= ballBottom
+    ) {
+      score++;
+      $('#scoreValue').text(score);
+      resetBall();
+    }
+  }
+
+  function resetBall() {
+    ballPosition.x = Math.random() * (gameAreaWidth - 25);
+    ballPosition.y = Math.random() * (gameAreaHeight - 25);
+    updateBall();
+  }
+
+  // Handle player movement
+  $(document).keydown(function(e) {
+    if (e.keyCode === 37) { 
+      playerPosition.x -= playerSpeed;
+    } else if (e.keyCode === 39) { 
+      playerPosition.x += playerSpeed;
+    } else if (e.keyCode === 38) { 
+      playerPosition.y -= playerSpeed;
+    } else if (e.keyCode === 40) { 
+      playerPosition.y += playerSpeed;
+    }
+
+    if (playerPosition.x < 0) {
+      playerPosition.x = 0;
+    } else if (playerPosition.x > gameAreaWidth - 50) {
+      playerPosition.x = gameAreaWidth - 50;
+    }
+
+    if (playerPosition.y < 0) {
+      playerPosition.y = 0;
+    } else if (playerPosition.y > gameAreaHeight - 50) {
+      playerPosition.y = gameAreaHeight - 50;
+    }
+
+    updatePlayer();
+    checkCollision();
+  });
+
+  function initializeGame() {
+    updatePlayer();
+    updateBall();
+
+    setInterval(function() {
+      ballPosition.x += (Math.random() - 0.5) * ballSpeed * 2;
+      ballPosition.y += (Math.random() - 0.5) * ballSpeed * 2;
+
+      if (ballPosition.x < 0 || ballPosition.x > gameAreaWidth - 25) {
+        ballPosition.x = Math.max(0, Math.min(gameAreaWidth - 25, ballPosition.x));
+      }
+
+      if (ballPosition.y < 0 || ballPosition.y > gameAreaHeight - 25) {
+        ballPosition.y = Math.max(0, Math.min(gameAreaHeight - 25, ballPosition.y));
+      }
+
+      updateBall();
+      checkCollision();
+    }, 100);
+  }
+
+  initializeGame();
+});
+</script>
+</html>

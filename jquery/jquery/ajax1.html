@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        jQuery ajax() Method
+    </title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("li:parent").css("background-color", "green");
+        });
+    </script>
+</head>
+
+<body style="text-align:center;">
+
+    <body>
+        <body style="text-align:center;">
+      
+            <h1 id="geeks1" style="color:green">GeeksForGeeks</h1>
+            <h2 id="geeks2">jQuery ajaxSetup() Method</h2>
+            <h3></h3>
+              
+            <button>Click</button>
+
+
+        <!-- Script to use ajax() method to
+		add text content -->
+        <script>
+            $(document).ready(function(){
+                $(document).ajaxStop(function(){
+                    alert('Ajax request is started')
+                })
+                $('button').click(function(){
+                    $('#geeks2').load('geeks.txt')
+                })
+            })
+        </script>
+    </body>
+
+</html>

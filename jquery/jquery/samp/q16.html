@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<title>The jQuery Example</title>
+<script src="https://www.tutorialspoint.com/jquery/jquery-3.6.0.js"></script>
+<script>
+   $(document).ready(function() {
+      $("button").click(function(){
+         $( ".hello" ).removeClass("big" );
+        //  $( ".goodbye" ).removeClass("small" );
+      });
+   });
+</script>
+<style>
+   .big{ font-weight: bold; font-size:20px; }
+   .small{ font-weight: normal; font-size:10px; }
+</style>
+</head>
+<body>
+   <div class="container">
+      <h2>jQuery removeClass() Method</h2>
+      <div class="hello big">Hello</div>
+      <div class="goodbye small">Goodbye</div>
+   </div>
+   <br>
+   
+   <button>Remove Class</button>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login and Signup</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <style>
+    .password-strength {
+      color: red;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+    .sticky-note {
+      width: 200px;
+      height: 200px;
+      background-color: yellow;
+      position: absolute;
+      cursor: move;
+      padding: 10px;
+    }
+    .sticky-note .remove {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Login and Signup</h1>
+  
+  <div id="loggedInUserSection" class="hidden">
+    <h2>Welcome <span id="loggedInUsername"></span></h2>
+    <button id="logoutButton">Logout</button>
+    <hr>
+  </div>
+
+  <div id="loginPage">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="loginUsername">Username:</label>
+      <input type="text" id="loginUsername" required>
+      <br>
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" required>
+      <br>
+      <button type="submit">Login</button>
+    </form>
+    <button id="toggleButton">New User? Sign Up</button>
+  </div>
+  
+  <div id="signupPage" class="hidden">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <label for="signupUsername">Username:</label>
+      <input type="text" id="signupUsername" required>
+      <br>
+      <label for="signupPassword">Password:</label>
+      <input type="password" id="signupPassword" required>
+      <br>
+      <div class="password-strength"></div>
+      <br>
+      <button type="submit" id="signupButton" disabled>Sign Up</button>
+    </form>
+    <button id="toggleButton">Existing User? Login</button>
+  </div>
+  
+  <div id="stickyNotePage" class="hidden">
+    <h2>Draggable Sticky Notes</h2>
+    <input type="text" id="taskInput" placeholder="Enter task">
+    <button id="addNoteBtn">Add Sticky Note</button>
+    <div id="notesContainer"></div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      var loggedInUser = getStoredCredentials();
+      
+      if (loggedInUser) {
+        showLoggedInUserSection(loggedInUser.username);
+        showStickyNotePage();
+        retrieveStickyNotes();
+      } else {
+        showLoginPage();
+      }
+
+      // Toggle between login and signup pages
+      $('#toggleButton').click(function() {
+        $('#loginPage').toggleClass('hidden');
+        $('#signupPage').toggleClass('hidden');
+      });
+
+      // Login form submission
+      $('#loginForm').submit(function(e) {
+        e.preventDefault();
+        var username = $('#loginUsername').val();
+        var password = $('#loginPassword').val();
+        var storedCredentials = getStoredCredentials();
+
+        if (storedCredentials && storedCredentials.username === username && storedCredentials.password === password) {
+          $('#loginForm')[0].reset();
+          showLoggedInUserSection(username);
+          showStickyNotePage();
+          retrieveStickyNotes();
+        } else {
+          alert('Invalid username or password. Please try again.');
+        }
+      });
+
+      // Signup form submission
+      $('#signupForm').submit(function(e) {
+        e.preventDefault();
+        var username = $('#signupUsername').val();
+        var password = $('#signupPassword').val();
+        var strength = checkPasswordStrength(password);
+
+        if (strength === 'Strong') {
+          storeCredentials(username, password);
+          $('#signupForm')[0].reset();
+          showLoggedInUserSection(username);
+          showStickyNotePage();
+        } else {
+          alert('Please enter a strong password.');
+        }
+      });
+
+      // Password strength check
+      $('#signupPassword').keyup(function() {
+        var password = $(this).val();
+        var strength = checkPasswordStrength(password);
+        $('.password-strength').text('Password Strength: ' + strength);
+        $('#signupButton').prop('disabled', !(strength === 'Strong'));
+      });
+
+      function checkPasswordStrength(password) {
+        var regex = /^(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (regex.test(password)) {
+          return 'Strong';
+        } else {
+          return 'Weak';
+        }
+      }
+
+      // Store credentials in local storage
+      function storeCredentials(username, password) {
+        var credentials = {
+          username: username,
+          password: password
+        };
+        localStorage.setItem('credentials', JSON.stringify(credentials));
+      }
+
+      // Retrieve stored credentials from local storage
+      function getStoredCredentials() {
+        var storedCredentials = localStorage.getItem('credentials');
+        if (storedCredentials) {
+          return JSON.parse(storedCredentials);
+        }
+        return null;
+      }
+
+      // Show logged-in user section
+      function showLoggedInUserSection(username) {
+        $('#loggedInUsername').text(username);
+        $('#loggedInUserSection').removeClass('hidden');
+      }
+
+      // Show login page
+      function showLoginPage() {
+        $('#loginPage').removeClass('hidden');
+      }
+
+      // Show sticky note page
+      function showStickyNotePage() {
+        $('#loginPage').addClass('hidden');
+        $('#signupPage').addClass('hidden');
+        $('#stickyNotePage').removeClass('hidden');
+      }
+
+      // Create draggable sticky notes
+      $('#addNoteBtn').click(function() {
+        var task = $('#taskInput').val();
+        createStickyNoteElement(task);
+        storeStickyNotes();
+      });
+
+      function createStickyNoteElement(task) {
+        var note = $('<div>', {
+          class: 'sticky-note',
+          text: task
+        }).draggable();
+
+        var removeButton = $('<span>', {
+          class: 'remove',
+          text: 'x'
+        }).click(function() {
+          $(this).parent().remove();
+          storeStickyNotes();
+        });
+
+        note.append(removeButton);
+        $('#notesContainer').append(note);
+      }
+
+      // Retrieve sticky notes from local storage
+      function retrieveStickyNotes() {
+        var stickyNotes = localStorage.getItem('stickyNotes');
+        if (stickyNotes) {
+          $('#notesContainer').html(stickyNotes);
+          makeStickyNotesDraggable();
+          enableStickyNoteRemoval();
+        }
+      }
+
+      // Make sticky notes draggable
+      function makeStickyNotesDraggable() {
+        $('.sticky-note').draggable();
+      }
+
+      // Enable sticky note removal
+      function enableStickyNoteRemoval() {
+        $('.remove').click(function() {
+          $(this).parent().remove();
+          storeStickyNotes();
+        });
+      }
+
+      function storeStickyNotes() {
+        var stickyNotes = $('#notesContainer').html();
+        localStorage.setItem('stickyNotes', stickyNotes);
+      }
+
+
+      $('#logoutButton').click(function() {
+        $('#loggedInUserSection').addClass('hidden');
+        $('#stickyNotePage').addClass('hidden');
+        showLoginPage();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign Up and Login</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    .password-strength {
+      color: red;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sign Up</h1>
+  <form id="signupForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <br>
+    <div class="password-strength"></div>
+    <br>
+    <button type="submit">Sign Up</button>
+  </form>
+
+  <div id="stickyNotePage" class="hidden">
+    <h1>Draggable Sticky Notes</h1>
+    <input type="text" id="taskInput" placeholder="Enter task">
+    <button id="addNoteBtn">Add Sticky Note</button>
+    <div id="notesContainer"></div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      // Sign up form submission
+      $('#signupForm').submit(function(e) {
+        e.preventDefault();
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var strength = checkPasswordStrength(password);
+
+        if (strength === 'Strong') {
+          storeCredentials(username, password);
+          $('#signupForm')[0].reset();
+          $('#stickyNotePage').removeClass('hidden');
+        } else {
+          alert('Please enter a strong password.');
+        }
+      });
+
+      // Password strength check
+      $('#password').keyup(function() {
+        var password = $(this).val();
+        var strength = checkPasswordStrength(password);
+        $('.password-strength').text('Password Strength: ' + strength);
+      });
+
+      function checkPasswordStrength(password) {
+        var regex = /^(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (regex.test(password)) {
+          return 'Strong';
+        } else {
+          return 'Weak';
+        }
+      }
+
+      // Store credentials in local storage
+      function storeCredentials(username, password) {
+        var credentials = {
+          username: username,
+          password: password
+        };
+        localStorage.setItem('credentials', JSON.stringify(credentials));
+      }
+
+      // Retrieve stored credentials from local storage
+      function getStoredCredentials() {
+        var storedCredentials = localStorage.getItem('credentials');
+        if (storedCredentials) {
+          return JSON.parse(storedCredentials);
+        }
+        return null;
+      }
+
+      // Check if user is already signed up
+      var storedCredentials = getStoredCredentials();
+      if (storedCredentials) {
+        $('#stickyNotePage').removeClass('hidden');
+        $('#addNoteBtn').click(function() {
+        var task = $('#taskInput').val();
+        createStickyNote(task);
+      });
+
+      function createStickyNote(task) {
+        var note = $('<div>', {
+          class: 'sticky-note',
+          text: task
+        }).draggable();
+
+        $('#notesContainer').append(note);
+      }
+      }
+    });
+  </script>
+</body>
+</html>
