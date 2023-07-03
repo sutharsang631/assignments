@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plp</title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"></script>
+<body>
+    <h1>Product Listing Page</h1>
+    <select data-bind="options: foodTypes, value: selectedFoodType, event: { change: filterProducts }"></select>
+    <div class="main1" data-bind="foreach: displayedProducts">
+        <div>
+            <h3 data-bind="text:name"></h3>
+            <p data-bind="text:description"></p>
+            <p data-bind="text:price"></p>
+        </div>
+    </div>
+    <div>
+        <button data-bind="click:previousPage,enable: currentPage()>0"><</button> </button>
+        <span data-bind="text:currentPage()+1"></span>
+        <button data-bind="click:nextPage ,enable:currentPage()<totalPages()-1">></button>
+    </div>
+    <script>
+        function Product(name,description,price,type){
+            this.name=name;
+            this.description=description
+            this.price=price
+            this.type=type    
+        }
+        var products = [
+      new Product("Chinese Dish 1", "Delicious Chinese dish 1", "$10.99", "Chinese"),
+      new Product("Chinese Dish 2", "Delicious Chinese dish 2", "$12.99", "Chinese"),
+      new Product("Chinese Dish 3", "Delicious Chinese dish 3", "$9.99", "Chinese"),
+      new Product("Chinese Dish 4", "Delicious Chinese dish 4", "$11.99", "Chinese"),
+      new Product("Chinese Dish 5", "Delicious Chinese dish 5", "$13.99", "Chinese"),
+      new Product("Chinese Dish 6", "Delicious Chinese dish 6", "$8.99", "Chinese"),
+      new Product("Chinese Dish 7", "Delicious Chinese dish 7", "$14.99", "Chinese"),
+      new Product("Chinese Dish 8", "Delicious Chinese dish 8", "$16.99", "Chinese"),
+      new Product("Chinese Dish 9", "Delicious Chinese dish 9", "$10.99", "Chinese"),
+      new Product("Chinese Dish 10", "Delicious Chinese dish 10", "$12.99", "Chinese"),
+      new Product("Butter Chicken   ", "Spicy Indian dish 1", "$8.99", "Indian"),
+      new Product("Biryan ", "Spicy Indian dish 2", "$11.99", "Indian"),
+      new Product("Masala Dosa", "Spicy Indian dish 3", "$13.99", "Indian"),
+      new Product("Tandoori Chicken", "Spicy Indian dish 4", "$10.99", "Indian"),
+      new Product("Paneer Tikka", "Spicy Indian dish 5", "$12.99", "Indian"),
+      new Product("Rogan Josh", "Spicy Indian dish 6", "$9.99", "Indian"),
+      new Product("Samosa", "Spicy Indian dish 7", "$14.99", "Indian"),
+      new Product("Palak Paneer", "Spicy Indian dish 8", "$16.99", "Indian"),
+      new Product("Vada Pav", "Spicy Indian dish 9", "$10.99", "Indian"),
+      new Product("Dahi Puri", "Spicy Indian dish 10", "$12.99", "Indian"),
+      new Product("Hyderabadi Biryani", "Spicy Indian dish 11", "$12.99", "Indian"),
+      new Product("Malai Kofta", "Spicy Indian dish 12", "$12.99", "Indian"),
+      new Product("Aloo Gobi", "Spicy Indian dish 13", "$12.99", "Indian"),
+      new Product("Chicken Korma", "Spicy Indian dish 14", "$12.99", "Indian"),
+      new Product("Pani Puri", "Spicy Indian dish 15", "$12.99", "Indian"),
+      new Product("American Dish 2", "Classic American dish 2", "$16.99", "American"),
+      new Product("American Dish 3", "Classic American dish 3", "$10.99", "American"),
+      new Product("American Dish 4", "Classic American dish 4", "$12.99", "American"),
+      new Product("American Dish 5", "Classic American dish 5", "$9.99", "American"),
+      new Product("American Dish 6", "Classic American dish 6", "$11.99", "American"),
+      new Product("American Dish 7", "Classic American dish 7", "$13.99", "American"),
+      new Product("American Dish 8", "Classic American dish 8", "$8.99", "American"),
+      new Product("American Dish 9", "Classic American dish 9", "$14.99", "American"),
+      new Product("American Dish 10", "Classic American dish 10", "$16.99", "American"),
+    ];
+    function ProductViewModel(){
+        var self=this;
+        self.foodTypes=ko.observableArray(["All","Chinese","Indian","American"])
+        self.selectedFoodType=ko.observable("All")
+        self.currentPage=ko.observable(0)
+        self.pageSize=5
+        self.filteredProducts=ko.computed(function(){
+            var selectedType=self.selectedFoodType()
+            if(selectedType==="All"){
+                return products
+            }
+            else{
+                return products.filter(function(product){
+                    return product.type===selectedType
+                })
+            }
+        })
+        self.totalPages=ko.computed(function(){
+            return Math.ceil((self.filteredProducts().length)/self.pageSize);
+        })
+        console.log(self.totalPages())
+        self.displayedProducts=ko.computed(function(){
+            var startIndex=self.currentPage()*self.pageSize
+            return self.filteredProducts().slice(startIndex,startIndex+self.pageSize)
+
+        })
+        self.filterProducts = function() {
+        self.currentPage(0);
+      };
+
+      self.nextPage = function() {
+        if (self.currentPage() < self.totalPages() - 1) {
+          self.currentPage(self.currentPage() + 1);
+        }
+      };
+        self.previousPage = function() {
+        if (self.currentPage() > 0) {
+          self.currentPage(self.currentPage() - 1);
+        }
+      };
+
+    }
+    ko.applyBindings(new ProductViewModel())
+    // console.log(totalPages())
+    </script>
+</body>
+</html>

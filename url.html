@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Listing Page</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"></script>
+  <style>
+    .pagination {
+      display: inline-block;
+    }
+
+    .pagination button {
+      background-color: #f2f2f2;
+      border: none;
+      color: black;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .pagination button.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Product Listing Page</h1>
+
+  <select data-bind="options: foodTypes, value: selectedFoodType, event: { change: filterProducts }"></select>
+
+  <div data-bind="foreach: displayedProducts">
+    <div>
+      <h3><a data-bind="text: name, attr: { href: 'product.html?name=' + encodeURIComponent(name) + '&description=' + encodeURIComponent(description) + '&price=' + encodeURIComponent(price) }"></a></h3>
+      <!-- <p data-bind="text: description"></p> -->
+      <p data-bind="text: price"></p>
+    </div>
+  </div>
+
+  <div class="pagination">
+    <button data-bind="click: previousPage, enable: currentPage() > 0">Previous</button>
+
+    
+    <!-- ko foreach: Array.from({ length: totalPages() }, (_, index) => index) -->
+    <button data-bind="text: $data + 1, click: $parent.goToPage.bind($parent, $data), css: { active: $parent.currentPage() === $data }"></button>
+    <!-- /ko -->
+    <button data-bind="click: nextPage, enable: currentPage() < totalPages() - 1">Next</button>
+  </div>
+
+  <script>
+    function Product(name, description, price, type) {
+      this.name = name;
+      this.description = description;
+      this.price = price;
+      this.type = type;
+    }
+
+    var products = [
+    new Product("Butter Chicken   ", "Spicy Indian dish 1", "$8.99", "Indian"),
+      new Product("Biryan ", "Spicy Indian dish 2", "$11.99", "Indian"),
+      new Product("Masala Dosa", "Spicy Indian dish 3", "$13.99", "Indian"),
+      new Product("Tandoori Chicken", "Spicy Indian dish 4", "$10.99", "Indian"),
+      new Product("Paneer Tikka", "Spicy Indian dish 5", "$12.99", "Indian"),
+      new Product("Rogan Josh", "Spicy Indian dish 6", "$9.99", "Indian"),
+      new Product("Samosa", "Spicy Indian dish 7", "$14.99", "Indian"),
+      new Product("Palak Paneer", "Spicy Indian dish 8", "$16.99", "Indian"),
+      new Product("Vada Pav", "Spicy Indian dish 9", "$10.99", "Indian"),
+      new Product("Dahi Puri", "Spicy Indian dish 10", "$12.99", "Indian"),
+      new Product("Hyderabadi Biryani", "Spicy Indian dish 11", "$12.99", "Indian"),
+      new Product("Malai Kofta", "Spicy Indian dish 12", "$12.99", "Indian"),
+      new Product("Aloo Gobi", "Spicy Indian dish 13", "$12.99", "Indian"),
+      new Product("Chicken Korma", "Spicy Indian dish 14", "$12.99", "Indian"),
+      new Product("Pani Puri", "Spicy Indian dish 15", "$12.99", "Indian"),
+      new Product("Chinese Dish 1", "Delicious Chinese dish 1", "$10.99", "Chinese"),
+      new Product("Chinese Dish 2", "Delicious Chinese dish 2", "$12.99", "Chinese"),
+      new Product("Chinese Dish 3", "Delicious Chinese dish 3", "$9.99", "Chinese"),
+      new Product("Indian Dish 1", "Spicy Indian dish 1", "$8.99", "Indian"),
+      new Product("Indian Dish 2", "Spicy Indian dish 2", "$11.99", "Indian"),
+      new Product("Indian Dish 3", "Spicy Indian dish 3", "$13.99", "Indian"),
+      new Product("American Dish 1", "Classic American dish 1", "$14.99", "American"),
+      new Product("American Dish 2", "Classic American dish 2", "$16.99", "American"),
+      new Product("American Dish 3", "Classic American dish 3", "$10.99", "American")
+    ];
+
+    function ProductViewModel() {
+      var self = this;
+
+      self.foodTypes = ko.observableArray(["All", "Chinese", "Indian", "American"]);
+      self.selectedFoodType = ko.observable("All");
+
+      self.currentPage = ko.observable(0);
+      self.pageSize = 5;
+      self.pageButtonsToShow = 3;
+
+      self.filteredProducts = ko.computed(function() {
+        var selectedType = self.selectedFoodType();
+        console.log(selectedType)
+
+        if (selectedType === "All") {
+          
+          return products;
+        } else {
+          return products.filter(function(product) {
+            return product.type === selectedType;
+            console.log(product.type==selectedType)
+          });
+        }
+      });
+
+      self.totalPages = ko.computed(function() {
+        console.log((self.filteredProducts().length) )
+        console.log(Math.ceil(self.filteredProducts().length / self.pageSize))
+        // console.log(Math.ceil(4.1))
+        return Math.ceil(self.filteredProducts().length / self.pageSize);
+      });
+
+      self.displayedProducts = ko.computed(function() {
+        var startIndex = self.currentPage() * self.pageSize;
+        console.log(startIndex)
+        console.log(self.pageSize )
+        return self.filteredProducts().slice(startIndex, startIndex + self.pageSize);
+      });
+
+      self.filterProducts = function() {
+        self.currentPage(0);
+      };
+
+      self.nextPage = function() {
+        if (self.currentPage() < self.totalPages() - 1) {
+          self.currentPage(self.currentPage() + 1);
+        }
+      };
+
+      self.previousPage = function() {
+        if (self.currentPage() > 0) {
+          self.currentPage(self.currentPage() - 1);
+        }
+      };
+
+      self.goToPage = function(pageIndex) {
+        self.currentPage(pageIndex);
+      };
+      // console.log(self.filteredProducts())
+      // console.log(self.filterProducts())
+      // console.log(self.nextPage())
+      // console.log(self.previousPage())
+      // console.log(self.goToPage)
+    }
+
+    ko.applyBindings(new ProductViewModel());
+  </script>
+</body>
+</html>

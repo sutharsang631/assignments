@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Listing Page</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"></script>
+</head>
+<body>
+  <h1>Product Listing Page</h1>
+
+  <select data-bind="options: foodTypes, value: selectedFoodType, event: { change: filterProducts }"></select>
+
+  <div data-bind="foreach: displayedProducts">
+    <div>
+      <h3 data-bind="text: name"></h3>
+      <p data-bind="text: description"></p>
+      <p data-bind="text: price"></p>
+    </div>
+  </div>
+
+  <div>
+    <button data-bind="click: previousPage, enable: currentPage() > 0">Previous Page</button>
+    <span data-bind="text: currentPage"></span>
+    <button data-bind="click: nextPage, enable: currentPage() < totalPages() - 1">Next Page</button>
+  </div>
+
+  <script>
+    function Product(name, description, price, type) {
+      this.name = name;
+      this.description = description;
+      this.price = price;
+      this.type = type;
+    }
+
+    var products = [
+      new Product("Chinese Dish 1", "Delicious Chinese dish 1", "$10.99", "Chinese"),
+      new Product("Chinese Dish 2", "Delicious Chinese dish 2", "$12.99", "Chinese"),
+      new Product("Chinese Dish 3", "Delicious Chinese dish 3", "$9.99", "Chinese"),
+      new Product("Indian Dish 1", "Spicy Indian dish 1", "$8.99", "Indian"),
+      new Product("Indian Dish 2", "Spicy Indian dish 2", "$11.99", "Indian"),
+      new Product("Indian Dish 3", "Spicy Indian dish 3", "$13.99", "Indian"),
+      new Product("American Dish 1", "Classic American dish 1", "$14.99", "American"),
+      new Product("American Dish 2", "Classic American dish 2", "$16.99", "American"),
+      new Product("American Dish 3", "Classic American dish 3", "$10.99", "American"),
+    ];
+
+    function ProductViewModel() {
+      var self = this;
+
+      self.foodTypes = ko.observableArray(["All", "Chinese", "Indian", "American"]);
+      self.selectedFoodType = ko.observable("All");
+
+      self.currentPage = ko.observable(0);
+      self.pageSize = 5;
+
+      self.filteredProducts = ko.computed(function() {
+        var selectedType = self.selectedFoodType();
+
+        if (selectedType === "All") {
+          return products;
+        } else {
+          return products.filter(function(product) {
+            return product.type === selectedType;
+          });
+        }
+      });
+
+      self.totalPages = ko.computed(function() {
+        return Math.ceil(self.filteredProducts().length / self.pageSize);
+      });
+
+      self.displayedProducts = ko.computed(function() {
+        var startIndex = self.currentPage() * self.pageSize;
+        return self.filteredProducts().slice(startIndex, startIndex + self.pageSize);
+      });
+
+      self.filterProducts = function() {
+        self.currentPage(0);
+      };
+
+      self.nextPage = function() {
+        if (self.currentPage() < self.totalPages() - 1) {
+          self.currentPage(self.currentPage() + 1);
+        }
+      };
+
+      self.previousPage = function() {
+        if (self.currentPage() > 0) {
+          self.currentPage(self.currentPage() - 1);
+        }
+      };
+    }
+
+    ko.applyBindings(new ProductViewModel());
+  </script>
+</body>
+</html>

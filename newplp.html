@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Listing Page</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"></script>
+</head>
+<body>
+  <h1>Product Listing Page</h1>
+
+  <select data-bind="options: foodTypes, value: selectedFoodType, event: { change: filterProducts }"></select>
+
+  <div data-bind="foreach: displayedProducts">
+    <div>
+      <h3 data-bind="text: name"></h3>
+      <p data-bind="text: description"></p>
+      <p data-bind="text: price"></p>
+    </div>
+  </div>
+
+  <div>
+    <button data-bind="click: previousPage, enable: currentPage() > 0">Previous Page</button>
+    <span data-bind="text: currentPage"></span>
+    <button data-bind="click: nextPage, enable: currentPage() < totalPages() - 1">Next Page</button>
+  </div>
+
+  <h2>Add New Product</h2>
+  <form data-bind="submit: addProduct">
+    <label>Name:</label>
+    <input type="text" data-bind="value: newProductName" required>
+    <br>
+    <label>Description:</label>
+    <input type="text" data-bind="value: newProductDescription" required>
+    <br>
+    <label>Price:</label>
+    <input type="text" data-bind="value: newProductPrice" required>
+    <br>
+    <label>Type:</label>
+    <select data-bind="options: foodTypes, value: newProductType" required></select>
+    <br>
+    <button type="submit">Add Product</button>
+  </form>
+
+  <script>
+    function Product(name, description, price, type) {
+      this.name = name;
+      this.description = description;
+      this.price = price;
+      this.type = type;
+    }
+
+    var products = [
+      new Product("Chinese Dish 1", "Delicious Chinese dish 1", "$10.99", "Chinese"),
+      new Product("Chinese Dish 2", "Delicious Chinese dish 2", "$12.99", "Chinese"),
+      new Product("Chinese Dish 3", "Delicious Chinese dish 3", "$9.99", "Chinese"),
+      new Product("Chinese Dish 4", "Delicious Chinese dish 4", "$11.99", "Chinese"),
+      new Product("Chinese Dish 5", "Delicious Chinese dish 5", "$13.99", "Chinese"),
+      new Product("Chinese Dish 6", "Delicious Chinese dish 6", "$8.99", "Chinese"),
+      new Product("Chinese Dish 7", "Delicious Chinese dish 7", "$14.99", "Chinese"),
+      new Product("Chinese Dish 8", "Delicious Chinese dish 8", "$16.99", "Chinese"),
+      new Product("Chinese Dish 9", "Delicious Chinese dish 9", "$10.99", "Chinese"),
+      new Product("Chinese Dish 10", "Delicious Chinese dish 10", "$12.99", "Chinese"),
+      new Product("Indian Dish 1", "Spicy Indian dish 1", "$8.99", "Indian"),
+      new Product("Indian Dish 2", "Spicy Indian dish 2", "$11.99", "Indian"),
+      new Product("Indian Dish 3", "Spicy Indian dish 3", "$13.99", "Indian"),
+      new Product("Indian Dish 4", "Spicy Indian dish 4", "$10.99", "Indian"),
+      new Product("Indian Dish 5", "Spicy Indian dish 5", "$12.99", "Indian"),
+      new Product("Indian Dish 6", "Spicy Indian dish 6", "$9.99", "Indian"),
+      new Product("Indian Dish 7", "Spicy Indian dish 7", "$14.99", "Indian"),
+      new Product("Indian Dish 8", "Spicy Indian dish 8", "$16.99", "Indian"),
+      new Product("Indian Dish 9", "Spicy Indian dish 9", "$10.99", "Indian"),
+      new Product("Indian Dish 10", "Spicy Indian dish 10", "$12.99", "Indian"),
+      new Product("American Dish 1", "Classic American dish 1", "$14.99", "American"),
+      new Product("American Dish 2", "Classic American dish 2", "$16.99", "American"),
+      new Product("American Dish 3", "Classic American dish 3", "$10.99", "American"),
+      new Product("American Dish 4", "Classic American dish 4", "$12.99", "American"),
+      new Product("American Dish 5", "Classic American dish 5", "$9.99", "American"),
+      new Product("American Dish 6", "Classic American dish 6", "$11.99", "American"),
+      new Product("American Dish 7", "Classic American dish 7", "$13.99", "American"),
+      new Product("American Dish 8", "Classic American dish 8", "$8.99", "American"),
+      new Product("American Dish 9", "Classic American dish 9", "$14.99", "American"),
+      new Product("American Dish 10", "Classic American dish 10", "$16.99", "American"),
+    ];
+
+    function ProductViewModel() {
+      var self = this;
+
+      self.foodTypes = ko.observableArray(["All", "Chinese", "Indian", "American"]);
+      self.selectedFoodType = ko.observable("All");
+
+      self.currentPage = ko.observable(0);
+      self.pageSize = 5;
+
+      self.filteredProducts = ko.computed(function() {
+        var selectedType = self.selectedFoodType();
+
+        if (selectedType === "All") {
+          return products;
+        } else {
+          return products.filter(function(product) {
+            return product.type === selectedType;
+          });
+        }
+      });
+
+      self.totalPages = ko.computed(function() {
+        return Math.ceil(self.filteredProducts().length / self.pageSize);
+      });
+
+      self.displayedProducts = ko.computed(function() {
+        var startIndex = self.currentPage() * self.pageSize;
+        return self.filteredProducts().slice(startIndex, startIndex + self.pageSize);
+      });
+
+      self.filterProducts = function() {
+        self.currentPage(0);
+      };
+
+      self.nextPage = function() {
+        if (self.currentPage() < self.totalPages() - 1) {
+          self.currentPage(self.currentPage() + 1);
+        }
+      };
+
+      self.previousPage = function() {
+        if (self.currentPage() > 0) {
+          self.currentPage(self.currentPage() - 1);
+        }
+      };
+
+      self.newProductName = ko.observable();
+      self.newProductDescription = ko.observable();
+      self.newProductPrice = ko.observable();
+      self.newProductType = ko.observable();
+
+      self.addProduct = function() {
+        var newName = self.newProductName();
+        var newDescription = self.newProductDescription();
+        var newPrice = self.newProductPrice();
+        var newType = self.newProductType();
+
+        var newProduct = new Product(newName, newDescription, newPrice, newType);
+        products.push(newProduct);
+        self.newProductName("");
+        self.newProductDescription("");
+        self.newProductPrice("");
+        self.newProductType("");
+      };
+    }
+
+    ko.applyBindings(new ProductViewModel());
+  </script>
+</body>
+</html>
