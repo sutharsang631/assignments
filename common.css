@@ -1,0 +1,54 @@
+.sticky-note {
+    width: 200px;
+    height: 200px;
+    background-color: #FFC107;
+    position: relative;
+    cursor: move;
+    padding: 10px;
+    float: left;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .sticky-note .remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .sticky-note .remove:hover {
+    color: #FF0000;
+  }
+  
+  #taskInput {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  #addNoteBtn {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #addNoteBtn:hover {
+    background-color: #2E8B57;
+  }
+  
+  #notesContainer {
+    position: relative;
+    margin-top: 20px;
+    min-height: 200px;
+  }
+  

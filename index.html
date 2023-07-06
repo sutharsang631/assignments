@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sticky Notes</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="config"></script>
+  <link rel="stylesheet" type="text/css" href="common.css">
+</head>
+
+<body>
+  <h1>Sticky notes</h1>
+
+  <div id="stickyNotePage">
+    <h2>Draggable Sticky Notes</h2>
+    <input type="text" id="taskInput" placeholder="Enter task" data-bind="value: taskInput">
+    <button id="addNoteBtn" data-bind="click: addNote">Add Sticky Note</button>
+    <div id="notesContainer" data-bind="foreach: notes">
+      <div class="sticky-note" data-bind="draggable: true">
+        <span data-bind="text: task"></span>
+        <span class="remove" data-bind="click: $parent.removeNote">x</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
