@@ -1,10 +1,11 @@
 require(['knockout', 'viewmodel', 'jquery', 'jqueryUI'], function (ko, StickyNotesViewModel,$) {
-    var viewModel = new StickyNotesViewModel();
-    ko.applyBindings(viewModel);
+    var viewModel = new StickyNotesViewModel()
+    ko.applyBindings(viewModel)
 
     ko.bindingHandlers.draggable = {
       init: function (element) {
-        $(element).draggable();
+        $(element).draggable()
+        console.log(element)
       }
-    };
-  });
+    }
+  })

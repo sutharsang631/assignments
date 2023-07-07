@@ -6,5 +6,5 @@ require.config({
     },
   });
   
-  require(['index']);
+  require(['index'])
   
