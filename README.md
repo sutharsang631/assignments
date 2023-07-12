@@ -60,3 +60,11 @@ The Product Details page is a web application that displays detailed information
 
 - [Knockout.js](https://knockoutjs.com/): Used for data binding and UI updates.
 
+
+# Duration of the Task
+- Duration: 11 hrs
+- ETA: 4 hrs
+
+# Bugs Report 
+- no bugs are reported 
+
