@@ -18,7 +18,7 @@
 
 ## Getting Started
 
-1. Clone the repository: git clone https://github.com/sutharsang631/assignments.git
+1. Clone the repository: git clone -b require.js  https://github.com/sutharsang631/assignments.git
 
 2. 2. Open the `index.html` file in a web browser.
 
